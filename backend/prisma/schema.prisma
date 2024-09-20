@@ -73,3 +73,12 @@ model Task {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model Donation {
+  donation_id  Int    @id @default(autoincrement())
+  amount       Float
+  donar_name   String? @default("Anonymous")
+  donar_email  String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
