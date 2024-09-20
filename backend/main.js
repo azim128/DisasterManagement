@@ -2,6 +2,7 @@ import express from "express";
 import { PORT } from "./config/variable.config.js";
 import prisma from "./lib/prisma.js";
 import { adminRouters, authRouters, userRouters } from "./routes/index.js";
+import cors from "cors";
 import {
   sendErrorResponse,
   sendSuccessResponse,
@@ -12,6 +13,9 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// cors setup
+app.use(cors());
 
 // Routes
 app.use("/api/v1/user", userRouters);

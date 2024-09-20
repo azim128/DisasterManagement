@@ -1,6 +1,6 @@
 import prisma from "../lib/prisma.js";
 import { generateToken } from "../utils/jwt.utils.js";
-import { verifyPassword } from "../utils/password.utils.js";
+import { hashPassword, verifyPassword } from "../utils/password.utils.js";
 import {
   sendErrorResponse,
   sendSuccessResponse,
@@ -37,12 +37,20 @@ const registerUser = async (req, res, next) => {
         email,
         phone_number,
       },
+      select: {
+        user_id: true,
+        name: true,
+        email: true,
+        phone_number: true,
+        role: true,
+        status: true,
+      },
     });
 
     sendSuccessResponse(res, 201, {
       message:
         "User registered successfully and can login after verified by admin",
-      newUser,
+      user:newUser,
     });
   } catch (error) {
     next(error);
