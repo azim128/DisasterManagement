@@ -22,12 +22,12 @@ const DonationForm = () => {
   const [email, setEmail] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { createDonation, loading, error, success } = useDonation();
-  
+
   const {
     data: lastDayDonations,
     loading: loadingDonations,
     error: donationsError,
-    refetch: refetchDonations // Assuming useFetchData returns a refetch function
+    refetch: refetchDonations, 
   } = useFetchData(`/api/v1/donation/last-n-days`, { days: 1 });
 
   useEffect(() => {
@@ -69,9 +69,13 @@ const DonationForm = () => {
             ) : donationsError ? (
               <p className="text-red-500">{donationsError}</p>
             ) : (
-              lastDayDonations.data.map((item) => (
-                <p key={item.date}>Total Donations Today: ${item.total}</p>
-              ))
+              <p>
+                Total Donations Today: $
+                {lastDayDonations.data.length > 0
+                  ? lastDayDonations.data[lastDayDonations.data.length - 1]
+                      .total
+                  : 0}
+              </p>
             )}
           </div>
         </CardHeader>
@@ -112,7 +116,7 @@ const DonationForm = () => {
                   placeholder="Enter your name"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
-                  required
+                  
                   className="pl-10"
                 />
               </div>

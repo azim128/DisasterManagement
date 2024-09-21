@@ -1,3 +1,9 @@
+import DonationReportDownload from "../../components/reports/DonationReportDownload";
+
 export default function ReportsManagementPage() {
-  return <div>Report Management page</div>;
+  return (
+    <div>
+      <DonationReportDownload />
+    </div>
+  );
 }
