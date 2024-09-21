@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma.js";
+import { severityEnum, statusEnum } from "../utils/enums.js";
 import {
   sendErrorResponse,
   sendSuccessResponse,
@@ -9,14 +10,11 @@ const addCrisis = async (req, res, next) => {
     const { title, description, severity, requiredHelp, imageUrl, location } =
       req.body;
 
-
     // Validate the required fields
     if (!title || !description || !severity || !requiredHelp || !location) {
       sendErrorResponse(res, 400, "All fields are required");
     }
 
-    // Validate the severity to be one of the enum values
-    const severityEnum = ["LOW", "MEDIUM", "HIGH", "CRITICAL"];
     if (!severityEnum.includes(severity)) {
       sendErrorResponse(res, 400, "Invalid severity value");
     }
@@ -47,14 +45,7 @@ const getAllCrisis = async (req, res, next) => {
   try {
     const { status, page = 1, limit = 10 } = req.query;
 
-    // Validate the status to be one of the enum values
-    const statusEnum = [
-      "PENDING",
-      "APPROVED",
-      "REJECTED",
-      "ASSIGNED",
-      "RESOLVED",
-    ];
+    
     if (status && !statusEnum.includes(status)) {
       sendErrorResponse(res, 400, "Invalid status value");
     }
@@ -71,8 +62,8 @@ const getAllCrisis = async (req, res, next) => {
       skip,
       take,
       include: {
-        approvedBy: true, // Optional: include the approvedBy user details
-        assignedTo: true, // Optional: include the assignedTo user details
+        approvedBy: true, 
+        assignedTo: true, 
       },
     });
 

@@ -1,3 +1,16 @@
-import {updateUserStatus,getAllUsers} from "./adminUserManagement.controller.js";
+import {
+  getAllUsers,
+  updateUserStatus,
+} from "./adminUserManagement.controller.js";
 
-export { updateUserStatus ,getAllUsers};
+import {
+  assignCrisisToVolunteer,
+  updateCrisisStatus,
+} from "./crisisManagement.controller.js";
+
+export {
+  assignCrisisToVolunteer,
+  getAllUsers,
+  updateCrisisStatus,
+  updateUserStatus,
+};

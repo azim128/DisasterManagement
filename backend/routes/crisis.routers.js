@@ -7,4 +7,5 @@ routers.post("/create", addCrisis);
 
 routers.get("/", getAllCrisis);
 
+
 export default routers;
