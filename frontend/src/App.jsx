@@ -23,6 +23,7 @@ import NotFoundPage from "./pages/Public/NotFoundPage";
 import TasksPage from "./pages/Volunteer/TasksPage";
 import VolunteerPage from "./pages/Volunteer/VolunteerPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
+import DonationPage from "./pages/Public/DonationPage";
 const adminItems = [
   { path: "/admin/settings", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
@@ -48,6 +49,7 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
+              <Route path="/make-donation" element={<DonationPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/not-authorized" element={<NotAuthorized />} />
             </Route>
