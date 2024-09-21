@@ -1,4 +1,4 @@
-import VolunteersTable from "../../components/VolunteersTable";
+import VolunteersTable from "../../components/admin/VolunteersTable";
 
 export default function VolunteersManagementPage() {
     return (

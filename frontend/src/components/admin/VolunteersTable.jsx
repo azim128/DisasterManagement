@@ -11,7 +11,6 @@ import {
   NumberInputField,
   NumberInputStepper,
   Select,
-  Skeleton,
   Table,
   Tbody,
   Td,
@@ -25,9 +24,10 @@ import {
 import axios from "axios";
 import { debounce } from "lodash";
 import { useCallback, useMemo, useState } from "react";
-import { apiUrl } from "../config/variables";
-import { useAuth } from "../context/AuthContext";
-import useVolunteers from "../hooks/useVolunteers";
+import { apiUrl } from "../../config/variables";
+import { useAuth } from "../../context/AuthContext";
+import useVolunteers from "../../hooks/useVolunteers";
+import SkeletonLoader from "../ui/SkeletonLoader";
 
 const VolunteersTable = () => {
   const [searchName, setSearchName] = useState("");
@@ -182,57 +182,37 @@ const VolunteersTable = () => {
             </Tr>
           </Thead>
           <Tbody>
-            {loading
-              ? Array.from({ length: data.pagination?.limit || 10 }).map(
-                  (_, index) => (
-                    <Tr key={index}>
-                      <Td>
-                        <Skeleton height="20px" />
-                      </Td>
-                      <Td>
-                        <Skeleton height="20px" />
-                      </Td>
-                      <Td>
-                        <Skeleton height="20px" />
-                      </Td>
-                      <Td>
-                        <Skeleton height="20px" />
-                      </Td>
-                      <Td>
-                        <Skeleton height="20px" />
-                      </Td>
-                      {showActionColumn && (
-                        <Td>
-                          <Skeleton height="20px" />
-                        </Td>
-                      )}
-                    </Tr>
-                  )
-                )
-              : data.users.map((volunteer) => (
-                  <Tr key={volunteer.user_id}>
-                    <Td>{volunteer.name}</Td>
-                    <Td>{volunteer.email}</Td>
-                    <Td>{volunteer.phone_number}</Td>
-                    <Td>{volunteer.role}</Td>
-                    <Td>{volunteer.status}</Td>
-                    {volunteer.role !== "ADMIN" && (
-                      <Td>
-                        <Select
-                          value={volunteer.status}
-                          onChange={(e) =>
-                            updateUserStatus(volunteer.user_id, e.target.value)
-                          }
-                          size="sm"
-                        >
-                          <option value="ACTIVE">Active</option>
-                          <option value="PENDING">Pending</option>
-                          <option value="DISABLED">Disabled</option>
-                        </Select>
-                      </Td>
-                    )}
-                  </Tr>
-                ))}
+            {loading ? (
+              <SkeletonLoader
+                rows={data.pagination?.limit || 10}
+                columns={showActionColumn ? 6 : 5}
+              />
+            ) : (
+              data.users.map((volunteer) => (
+                <Tr key={volunteer.user_id}>
+                  <Td>{volunteer.name}</Td>
+                  <Td>{volunteer.email}</Td>
+                  <Td>{volunteer.phone_number}</Td>
+                  <Td>{volunteer.role}</Td>
+                  <Td>{volunteer.status}</Td>
+                  {volunteer.role !== "ADMIN" && (
+                    <Td>
+                      <Select
+                        value={volunteer.status}
+                        onChange={(e) =>
+                          updateUserStatus(volunteer.user_id, e.target.value)
+                        }
+                        size="sm"
+                      >
+                        <option value="ACTIVE">Active</option>
+                        <option value="PENDING">Pending</option>
+                        <option value="DISABLED">Disabled</option>
+                      </Select>
+                    </Td>
+                  )}
+                </Tr>
+              ))
+            )}
           </Tbody>
         </Table>
       </Box>

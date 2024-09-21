@@ -45,7 +45,6 @@ const getAllCrisis = async (req, res, next) => {
   try {
     const { status, page = 1, limit = 10 } = req.query;
 
-    
     if (status && !statusEnum.includes(status)) {
       sendErrorResponse(res, 400, "Invalid status value");
     }
@@ -62,8 +61,8 @@ const getAllCrisis = async (req, res, next) => {
       skip,
       take,
       include: {
-        approvedBy: true, 
-        assignedTo: true, 
+        approvedBy: true,
+        assignedTo: true,
       },
     });
 
@@ -73,16 +72,42 @@ const getAllCrisis = async (req, res, next) => {
 
     sendSuccessResponse(res, 200, {
       message: "Crisis entries fetched successfully",
-      data: {
-        crisisEntries,
-        totalCrisisEntries,
-        totalPages: Math.ceil(totalCrisisEntries / limit),
-        currentPage: parseInt(page),
-      },
+
+      crisisEntries,
+      totalCrisisEntries,
+      totalPages: Math.ceil(totalCrisisEntries / limit),
+      currentPage: parseInt(page),
     });
   } catch (error) {
     next(error);
   }
 };
 
-export { addCrisis, getAllCrisis };
+const getCrisisById = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+
+    const crisisEntry = await prisma.crisisEntry.findUnique({
+      where: {
+        id: parseInt(id),
+      },
+      include: {
+        approvedBy: true,
+        assignedTo: true,
+      },
+    });
+
+    if (!crisisEntry) {
+      sendErrorResponse(res, 404, "Crisis entry not found");
+    }
+
+    sendSuccessResponse(res, 200, {
+      message: "Crisis entry fetched successfully",
+      ...crisisEntry,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export { addCrisis, getAllCrisis, getCrisisById };

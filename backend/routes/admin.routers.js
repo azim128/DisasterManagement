@@ -1,8 +1,13 @@
 import express from "express";
 import {
   assignCrisisToVolunteer,
+  createInventoryItem,
+  deleteInventoryItem,
   getAllUsers,
+  getInventoryItemById,
+  getInventoryItems,
   updateCrisisStatus,
+  updateInventoryItem,
   updateUserStatus,
 } from "../controllers/admin/index.js";
 import {
@@ -23,6 +28,27 @@ router.post(
   authenticateToken,
   checkIsAdmin,
   assignCrisisToVolunteer
+);
+
+router.post("/inventory", authenticateToken, checkIsAdmin, createInventoryItem);
+router.put(
+  "/inventory/:id",
+  authenticateToken,
+  checkIsAdmin,
+  updateInventoryItem
+);
+router.delete(
+  "/inventory/:id",
+  authenticateToken,
+  checkIsAdmin,
+  deleteInventoryItem
+);
+router.get("/inventory", authenticateToken, checkIsAdmin, getInventoryItems);
+router.get(
+  "/inventory/:id",
+  authenticateToken,
+  checkIsAdmin,
+  getInventoryItemById
 );
 
 export default router;

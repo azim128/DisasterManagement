@@ -1,7 +1,9 @@
+import CrisisTable from "../../components/admin/CrisisTable";
+
 export default function CrisesManagementPage() {
     return (
         <div>
-            Crises Management page
+            <CrisisTable />
         </div>
     );
 }

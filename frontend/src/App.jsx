@@ -17,13 +17,14 @@ import CrisesManagementPage from "./pages/Admin/CrisesManagementPage";
 import FeedBacksPage from "./pages/Admin/FeedBacksPage";
 import ReportsManagementPage from "./pages/Admin/ReportsManagementPage";
 import SettingPage from "./pages/Admin/SettingPage";
+import DonationPage from "./pages/Public/DonationPage";
 import HomePage from "./pages/Public/HomePage";
 import NotAuthorized from "./pages/Public/NotAuthorized";
 import NotFoundPage from "./pages/Public/NotFoundPage";
 import TasksPage from "./pages/Volunteer/TasksPage";
 import VolunteerPage from "./pages/Volunteer/VolunteerPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import DonationPage from "./pages/Public/DonationPage";
+import AssignTaskPage from "./pages/Admin/AssignTaskPage";
 const adminItems = [
   { path: "/admin/settings", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
@@ -73,6 +74,11 @@ function App() {
                   path="/admin/crises"
                   element={<CrisesManagementPage />}
                 />
+                <Route
+                  path="/admin/assign-task/:id"
+                  element={<AssignTaskPage />}
+                />
+
                 <Route path="/admin/feedbacks" element={<FeedBacksPage />} />
                 <Route path="/admin/settings" element={<SettingPage />} />
               </Route>

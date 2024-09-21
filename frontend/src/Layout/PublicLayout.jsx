@@ -4,7 +4,7 @@ import Footer from "../components/Footer";
 const PublicLayout = () => {
   return (
     <>
-      <main className="flex-grow container px-4 py-8 mx-auto">
+      <main className="flex-grow ">
         <Outlet />
       </main>
       <Footer />

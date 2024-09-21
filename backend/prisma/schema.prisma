@@ -48,6 +48,7 @@ model User {
   role              UserRole  @default(VOLUNTEER)
   status            UserStatus @default(PENDING)
   assigned_tasks    Task[]    
+  purchases   Purchase[]
   approved_crises   CrisisEntry[] @relation("ApprovedBy")
   assigned_crises   CrisisEntry[] @relation("AssignedTo")
 
@@ -118,4 +119,27 @@ model CrisisEntry {
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model InventoryItem {
+  id          Int       @id @default(autoincrement())
+  name        String
+  quantity    Int
+  category    String
+  price       Float
+  description String?
+  purchases   Purchase[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+
+model Purchase {
+  id          Int       @id @default(autoincrement())
+  item        InventoryItem @relation(fields: [itemId], references: [id])
+  itemId      Int
+  quantity    Int
+  user        User?     @relation(fields: [userId], references: [user_id])
+  userId      Int?
+  createdAt   DateTime  @default(now())
 }
