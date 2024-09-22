@@ -51,18 +51,16 @@ const Header = () => {
                   <NavItem to="/admin">Dashboard</NavItem>
                 )}
                 {isAuthenticated && user?.role === "VOLUNTEER" && (
-                  <NavItem to="/volunteers">Dashboard</NavItem>
+                  <NavItem to="/volunteers/stocks">Dashboard</NavItem>
                 )}
 
                 {isAuthenticated && (
-                  <>
                   <NavItem to="/inventory">Inventory</NavItem>
-                  <NavItem to="/account">Profile</NavItem></>
                 )}
                 {!isAuthenticated && (
                   <>
-                  <NavItem to="volunteer">Volunteer</NavItem>
-                  <NavItem to="crisis">Crisis</NavItem>
+                    <NavItem to="volunteer">Volunteer</NavItem>
+                    <NavItem to="crisis">Crisis</NavItem>
                   </>
                 )}
               </div>

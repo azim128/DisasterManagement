@@ -1,4 +1,4 @@
-import { Boxes, Calendar, FileText, History, Users } from "lucide-react";
+import { Boxes, Calendar, FileText, History, Users,Settings } from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import DashboardLayout from "./Layout/ DashboardLayout";
@@ -26,10 +26,11 @@ import HomePage from "./pages/Public/HomePage";
 import NotAuthorized from "./pages/Public/NotAuthorized";
 import NotFoundPage from "./pages/Public/NotFoundPage";
 import VolunteerPage from "./pages/Public/VolunteerPage";
+import PurchaseHistoryPage from "./pages/Volunteer/PurchaseHistoryPage";
 import StocksPage from "./pages/Volunteer/StocksPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 const adminItems = [
-  // { path: "/admin/settings", label: "Settings", icon: Settings },
+  { path: "/account", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
   { path: "/admin/reports", label: "Reports", icon: FileText },
   { path: "/admin/crises", label: "Crises", icon: Calendar },
@@ -37,6 +38,8 @@ const adminItems = [
 ];
 
 const volunteerItems = [
+  { path: "/account", label: "Settings", icon: Settings },
+
   { path: "/volunteers/stocks", label: "Available Stock", icon: Boxes }, // Updated label and icon for stock
   {
     path: "/volunteers/purchase-history",
@@ -103,14 +106,14 @@ function App() {
             {/* Volunteer routes */}
             <Route element={<ProtectedRoute allowedRoles={["VOLUNTEER"]} />}>
               <Route
-                path="/volunteers"
+                path="/"
                 element={<DashboardLayout navItems={volunteerItems} />}
               >
                 <Route path="" element={<VolunteerPage />} />
                 <Route path="/volunteers/stocks" element={<StocksPage />} />
                 <Route
                   path="/volunteers/purchase-history"
-                  element={<StocksPage />}
+                  element={<PurchaseHistoryPage />}
                 />
               </Route>
             </Route>
