@@ -43,18 +43,24 @@ const addCrisis = async (req, res, next) => {
 
 const getAllCrisis = async (req, res, next) => {
   try {
-    const { status, page = 1, limit = 10 } = req.query;
+    const { status, severity, page = 1, limit = 10 } = req.query;
 
     if (status && !statusEnum.includes(status)) {
-      sendErrorResponse(res, 400, "Invalid status value");
+      return sendErrorResponse(res, 400, "Invalid status value");
+    }
+
+    if (severity && !severityEnum.includes(severity)) {
+      return sendErrorResponse(res, 400, "Invalid severity value");
     }
 
     // Pagination logic
     const skip = (page - 1) * limit;
     const take = parseInt(limit);
 
-    // Filter by status if provided, otherwise get all
-    const whereClause = status ? { status } : {};
+    // Filter by status and severity if provided, otherwise get all
+    const whereClause = {};
+    if (status) whereClause.status = status;
+    if (severity) whereClause.severity = severity;
 
     const crisisEntries = await prisma.crisisEntry.findMany({
       where: whereClause,
@@ -72,7 +78,6 @@ const getAllCrisis = async (req, res, next) => {
 
     sendSuccessResponse(res, 200, {
       message: "Crisis entries fetched successfully",
-
       crisisEntries,
       totalCrisisEntries,
       totalPages: Math.ceil(totalCrisisEntries / limit),

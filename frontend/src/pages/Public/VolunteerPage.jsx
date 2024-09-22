@@ -1,7 +1,9 @@
+import VolunteerListComponent from "../../components/VolunteerListComponent";
+
 export default function VolunteerPage() {
     return (
         <div>
-            Volunteer page
+           <VolunteerListComponent />
         </div>
     );
 }

@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getAllVolunteers,
   getUserProfile,
   updateUserProfile,
 } from "../controllers/user.controller.js";
@@ -22,5 +23,7 @@ router.put(
   checkIsActive,
   updateUserProfile
 );
+
+router.get("/get-volunteers", getAllVolunteers);
 
 export default router;

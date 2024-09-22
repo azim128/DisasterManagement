@@ -68,4 +68,57 @@ const updateUserProfile = async (req, res, next) => {
 };
 
 
-export { getUserProfile,updateUserProfile };
+const getAllVolunteers = async (req, res, next) => {
+  try {
+    // Default values for page and limit if they are not provided
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    
+    // Calculate the number of items to skip
+    const skip = (page - 1) * limit;
+
+    // Fetch the total number of volunteers (for pagination metadata)
+    const totalVolunteers = await prisma.user.count({
+      where: {
+        role: "VOLUNTEER",
+        status: "ACTIVE",
+      },
+    });
+
+    // Fetch the paginated volunteers
+    const volunteers = await prisma.user.findMany({
+      where: {
+        role: "VOLUNTEER",
+        status: "ACTIVE",
+      },
+      select: {
+        user_id: true,
+        name: true,
+        email: true,
+        phone_number: true,
+        status: true,
+      },
+      skip: skip,
+      take: limit,
+    });
+
+    // Calculate total pages
+    const totalPages = Math.ceil(totalVolunteers / limit);
+
+    sendSuccessResponse(res, 200, {
+      message: "Volunteers fetched successfully",
+      volunteers,
+      pagination: {
+        totalVolunteers,
+        totalPages,
+        currentPage: page,
+        limit,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+export { getUserProfile,updateUserProfile,getAllVolunteers };

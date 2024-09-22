@@ -32,7 +32,7 @@ const CreateCrisis = () => {
 
       toast({
         title: "Crisis Created",
-        description: "The crisis has been successfully created.",
+        description: "The crisis has been successfully created, and Visible after admin approval.",
         status: "success",
         duration: 5000,
         isClosable: true,

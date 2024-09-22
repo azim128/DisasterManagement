@@ -23,11 +23,11 @@ import HomePage from "./pages/Public/HomePage";
 import NotAuthorized from "./pages/Public/NotAuthorized";
 import NotFoundPage from "./pages/Public/NotFoundPage";
 import TasksPage from "./pages/Volunteer/TasksPage";
-import VolunteerPage from "./pages/Volunteer/VolunteerPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import CrisisPage from "./pages/Public/CrisisPage";
 import ProfilePage from "./pages/Auth/ProfilePage";
 import InventoryPage from "./pages/common/InventoryPage";
+import VolunteerPage from "./pages/Public/VolunteerPage";
 const adminItems = [
   // { path: "/admin/settings", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },

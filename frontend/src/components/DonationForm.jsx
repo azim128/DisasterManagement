@@ -54,7 +54,7 @@ const DonationForm = () => {
   };
 
   return (
-    <div className="flex flex-col items-center">
+    <div className="flex flex-col items-center py-8">
       <Card className="w-full max-w-md shadow-2xl">
         <CardHeader className="space-y-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-t-xl">
           <CardTitle className="text-3xl font-bold text-center py-4">
