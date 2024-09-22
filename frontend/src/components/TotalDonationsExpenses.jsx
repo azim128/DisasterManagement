@@ -52,7 +52,7 @@ const TotalDonationsExpenses = () => {
       borderWidth={1}
       borderColor={borderColor}
     >
-      <Flex justifyContent="space-around">
+      <Flex justifyContent="center">
         {renderStat(
           "Total Donations",
           totalDonations,

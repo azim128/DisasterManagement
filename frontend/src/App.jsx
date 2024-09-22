@@ -1,4 +1,11 @@
-import { Boxes, Calendar, FileText, History, Users,Settings } from "lucide-react";
+import {
+  Boxes,
+  Calendar,
+  FileText,
+  History,
+  Settings,
+  Users,
+} from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import DashboardLayout from "./Layout/ DashboardLayout";
@@ -15,7 +22,7 @@ import ContactPage from "./pages/Public/ContactPage";
 import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
 import AssignTaskPage from "./pages/Admin/AssignTaskPage";
 import CrisesManagementPage from "./pages/Admin/CrisesManagementPage";
-import FeedBacksPage from "./pages/Admin/FeedBacksPage";
+import InventoryManagementPage from "./pages/Admin/InventoryManagementPage";
 import ReportsManagementPage from "./pages/Admin/ReportsManagementPage";
 import SettingPage from "./pages/Admin/SettingPage";
 import ProfilePage from "./pages/Auth/ProfilePage";
@@ -34,7 +41,7 @@ const adminItems = [
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
   { path: "/admin/reports", label: "Reports", icon: FileText },
   { path: "/admin/crises", label: "Crises", icon: Calendar },
-  { path: "/admin/feedbacks", label: "Feedbacks", icon: FileText },
+  { path: "/admin/inventory", label: "Inventory", icon: FileText },
 ];
 
 const volunteerItems = [
@@ -78,7 +85,7 @@ function App() {
             {/* Admin routes */}
             <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
               <Route
-                path="/admin"
+                path="/"
                 element={<DashboardLayout navItems={adminItems} />}
               >
                 <Route path="" element={<AdminDashboardPage />} />
@@ -98,7 +105,10 @@ function App() {
                   path="/admin/assign-task/:id"
                   element={<AssignTaskPage />}
                 />
-                <Route path="/admin/feedbacks" element={<FeedBacksPage />} />
+                <Route
+                  path="/admin/inventory"
+                  element={<InventoryManagementPage />}
+                />
                 <Route path="/admin/settings" element={<SettingPage />} />
               </Route>
             </Route>

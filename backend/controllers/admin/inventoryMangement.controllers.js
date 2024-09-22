@@ -52,7 +52,7 @@ const createInventoryItem = async (req, res, next) => {
 const updateInventoryItem = async (req, res, next) => {
   try {
     const { id } = req.params;
-    const { name, description, quantity, price, category } = req.body;
+    let { name, description, quantity, price, category } = req.body;
 
     // Check if the category is valid
     if (category && !categories.includes(category)) {
@@ -62,9 +62,7 @@ const updateInventoryItem = async (req, res, next) => {
     // Check if the item name is unique
     if (name) {
       const existingItem = await prisma.inventoryItem.findUnique({
-        where: {
-          name,
-        },
+        where: { name },
       });
 
       if (existingItem && existingItem.id !== parseInt(id)) {
@@ -72,18 +70,26 @@ const updateInventoryItem = async (req, res, next) => {
       }
     }
 
+    // Ensure quantity is a number if provided
+    if (quantity) {
+      quantity = parseInt(quantity, 10);
+      if (isNaN(quantity)) {
+        return sendErrorResponse(res, 400, "Quantity must be a valid number");
+      }
+    }
+
+    // Build the update data
+    const updateData = {};
+    if (name) updateData.name = name;
+    if (description) updateData.description = description;
+    if (quantity !== undefined) updateData.quantity = quantity;
+    if (price) updateData.price = price;
+    if (category) updateData.category = category;
+
     // Update the inventory item
     const updatedInventoryItem = await prisma.inventoryItem.update({
-      where: {
-        id: parseInt(id),
-      },
-      data: {
-        name,
-        description,
-        quantity,
-        price,
-        category,
-      },
+      where: { id: parseInt(id) },
+      data: updateData,
     });
 
     sendSuccessResponse(res, 200, {
@@ -139,7 +145,7 @@ const getInventoryItemById = async (req, res, next) => {
   }
 };
 
-//
+
 
 export {
   createInventoryItem,

@@ -48,7 +48,7 @@ const Header = () => {
                 <NavItem to="/about">About</NavItem>
                 <NavItem to="/donation">Donation</NavItem>
                 {isAuthenticated && user?.role === "ADMIN" && (
-                  <NavItem to="/admin">Dashboard</NavItem>
+                  <NavItem to="/admin/volunteers">Dashboard</NavItem>
                 )}
                 {isAuthenticated && user?.role === "VOLUNTEER" && (
                   <NavItem to="/volunteers/stocks">Dashboard</NavItem>
