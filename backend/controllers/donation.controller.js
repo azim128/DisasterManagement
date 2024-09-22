@@ -239,9 +239,28 @@ const generateDonationReport = async (req, res, next) => {
   }
 };
 
+
+const getTotalDonations = async (req, res, next) => {
+  try {
+    const totalDonations = await prisma.donation.aggregate({
+      _sum: {
+        amount: true,
+      },
+    });
+
+    sendSuccessResponse(res, 200, {
+      message: "Total donations fetched successfully",
+      totalDonations,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export {
   createDonation,
   generateDonationReport,
   getAllDonations,
   getDonationTotalsLastNDays,
+  getTotalDonations,
 };

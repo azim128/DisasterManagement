@@ -1,31 +1,91 @@
+import {
+  ChakraProvider,
+  Input,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  useDisclosure,
+  useToast,
+  VStack,
+  Spinner,
+  Text,
+  Skeleton
+} from "@chakra-ui/react";
+import axios from "axios";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useState } from "react";
+import { apiUrl } from "../config/variables";
+import { useAuth } from "../context/AuthContext";
 import useFetchData from "../hooks/useFetchData";
-import { categories } from "../utils/enums";
 import Button from "./ui/Button";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 
-const InventoryList = () => {
+const InventoryList = ({ showPurchaseButton = false }) => {
   const [filters, setFilters] = useState({
     page: 1,
     pageSize: 10,
     sort: "asc",
     category: "",
   });
+  const [selectedItem, setSelectedItem] = useState(null);
+  const [quantity, setQuantity] = useState(1);
+  const [isProcessing, setIsProcessing] = useState(false);
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast();
 
-  const { data, loading, error } = useFetchData("/api/v1/inventory", filters);
+  const { data, loading, error,refetch  } = useFetchData("/api/v1/inventory", filters);
+  const { token } = useAuth();
 
   const handleFilterChange = (key, value) => {
-    console.log(`Changing ${key} to ${value}`); // Check if this logs on select change
-    setFilters((prev) => {
-      const newFilters = {
-        ...prev,
-        [key]: value,
-        page: key !== "page" ? 1 : value,
-      };
-      console.log("New filters:", newFilters); // Check the updated filters
-      return newFilters;
-    });
+    setFilters((prev) => ({
+      ...prev,
+      [key]: value,
+      page: key !== "page" ? 1 : value,
+    }));
+  };
+
+  const handlePurchaseClick = (item) => {
+    setSelectedItem(item);
+    setQuantity(1);
+    onOpen();
+  };
+
+  const handlePurchase = async () => {
+    setIsProcessing(true);
+    try {
+      const response = await axios.post(
+        `${apiUrl}/api/v1/volunteer/inventory/purchase/`,
+        { itemId: selectedItem.id, quantity },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      toast({
+        title: "Purchase successful",
+        description: `You have purchased ${quantity} ${selectedItem.name}(s).`,
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+      });
+      onClose();
+      refetch();
+    } catch (error) {
+      toast({
+        title: "Purchase failed",
+        description: error.response?.data?.message || "An error occurred during the purchase.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      });
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   const renderPagination = () => (
@@ -57,94 +117,111 @@ const InventoryList = () => {
   );
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold mb-6">Inventory Items</h1>
+    <ChakraProvider>
+      <div className="container mx-auto p-4">
+        <h1 className="text-3xl font-bold mb-6">Inventory Items</h1>
 
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-4 sm:space-y-0 sm:space-x-4 mb-6">
-        <select
-          value={filters.category}
-          onChange={(e) => handleFilterChange("category", e.target.value)}
-          disabled={loading}
-          className="w-full  p-2 border rounded"
-        >
-          <option value="">All</option>
-          {categories.map((category) => (
-            <option key={category} value={category}>
-              {category}
-            </option>
+        {/* Filters and other existing code... */}
+
+        {error && <p className="text-red-500 mb-4">Error: {error}</p>}
+
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          {Array.from({ length: 6 }).map((_, index) => (
+            <Skeleton key={index} height="200px" borderRadius="md" />
           ))}
-        </select>
+        </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {data?.data.map((item) => (
+              <Card key={item.id}>
+                <CardHeader>
+                  <CardTitle>{item.name}</CardTitle>
+                </CardHeader>
+                <CardContent>
+                  <p className="text-sm text-gray-500 mb-2">
+                    {item.description}
+                  </p>
+                  <div className="space-y-1">
+                    <p>
+                      <span className="font-semibold">Quantity:</span>{" "}
+                      {item.quantity}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Price:</span> $
+                      {item.price.toFixed(2)}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Category:</span>{" "}
+                      {item.category}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Created:</span>{" "}
+                      {new Date(item.createdAt).toLocaleString()}
+                    </p>
+                    <p>
+                      <span className="font-semibold">Updated:</span>{" "}
+                      {new Date(item.updatedAt).toLocaleString()}
+                    </p>
+                  </div>
+                  {showPurchaseButton && (
+                    <Button
+                      className="mt-4"
+                      onClick={() => handlePurchaseClick(item)}
+                    >
+                      Purchase Now
+                    </Button>
+                  )}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        )}
 
-        <select
-          value={filters.sort}
-          onChange={(e) => handleFilterChange("sort", e.target.value)}
-          disabled={loading}
-          className="w-full  p-2 border rounded"
-        >
-          <option value="asc">Ascending</option>
-          <option value="desc">Descending</option>
-        </select>
+        {data && renderPagination()}
 
-        <select
-          value={filters.pageSize.toString()}
-          onChange={(e) =>
-            handleFilterChange("pageSize", parseInt(e.target.value))
-          }
-          disabled={loading}
-          className="w-full  p-2 border rounded"
-        >
-          <option value="5">5 per page</option>
-          <option value="10">10 per page</option>
-          <option value="20">20 per page</option>
-          <option value="50">50 per page</option>
-        </select>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Purchase {selectedItem?.name}</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody>
+              <VStack spacing={4} align="stretch">
+                <Text>Enter the quantity you wish to purchase:</Text>
+                <Input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  min="1"
+                  isDisabled={isProcessing}
+                />
+                {isProcessing && (
+                  <VStack>
+                    <Spinner size="xl" />
+                    <Text>Processing your purchase...</Text>
+                  </VStack>
+                )}
+              </VStack>
+            </ModalBody>
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={handlePurchase}
+                isDisabled={isProcessing}
+                isLoading={isProcessing}
+                loadingText="Purchasing..."
+              >
+                Confirm Purchase
+              </Button>
+              <Button variant="ghost" onClick={onClose} isDisabled={isProcessing}>
+                Cancel
+              </Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </div>
-
-      {error && <p className="text-red-500 mb-4">Error: {error}</p>}
-
-      {loading ? (
-        <div className="flex justify-center items-center h-64">
-          <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
-        </div>
-      ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {data?.data.map((item) => (
-            <Card key={item.id}>
-              <CardHeader>
-                <CardTitle>{item.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-sm text-gray-500 mb-2">{item.description}</p>
-                <div className="space-y-1">
-                  <p>
-                    <span className="font-semibold">Quantity:</span>{" "}
-                    {item.quantity}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Price:</span> $
-                    {item.price.toFixed(2)}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Category:</span>{" "}
-                    {item.category}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Created:</span>{" "}
-                    {new Date(item.createdAt).toLocaleString()}
-                  </p>
-                  <p>
-                    <span className="font-semibold">Updated:</span>{" "}
-                    {new Date(item.updatedAt).toLocaleString()}
-                  </p>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-      )}
-
-      {data && renderPagination()}
-    </div>
+    </ChakraProvider>
   );
 };
 

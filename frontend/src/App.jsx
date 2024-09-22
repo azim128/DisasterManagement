@@ -1,4 +1,4 @@
-import { Calendar, FileText, Users } from "lucide-react";
+import { Boxes, Calendar, FileText, History, Users } from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import DashboardLayout from "./Layout/ DashboardLayout";
@@ -18,16 +18,16 @@ import CrisesManagementPage from "./pages/Admin/CrisesManagementPage";
 import FeedBacksPage from "./pages/Admin/FeedBacksPage";
 import ReportsManagementPage from "./pages/Admin/ReportsManagementPage";
 import SettingPage from "./pages/Admin/SettingPage";
+import ProfilePage from "./pages/Auth/ProfilePage";
+import InventoryPage from "./pages/common/InventoryPage";
+import CrisisPage from "./pages/Public/CrisisPage";
 import DonationPage from "./pages/Public/DonationPage";
 import HomePage from "./pages/Public/HomePage";
 import NotAuthorized from "./pages/Public/NotAuthorized";
 import NotFoundPage from "./pages/Public/NotFoundPage";
-import TasksPage from "./pages/Volunteer/TasksPage";
-import ProtectedRoute from "./routes/ProtectedRoute";
-import CrisisPage from "./pages/Public/CrisisPage";
-import ProfilePage from "./pages/Auth/ProfilePage";
-import InventoryPage from "./pages/common/InventoryPage";
 import VolunteerPage from "./pages/Public/VolunteerPage";
+import StocksPage from "./pages/Volunteer/StocksPage";
+import ProtectedRoute from "./routes/ProtectedRoute";
 const adminItems = [
   // { path: "/admin/settings", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
@@ -37,8 +37,12 @@ const adminItems = [
 ];
 
 const volunteerItems = [
-  { path: "/volunteer/tasks", label: "Tasks", icon: FileText },
-  { path: "/volunteer", label: "Schedule", icon: Calendar },
+  { path: "/volunteers/stocks", label: "Available Stock", icon: Boxes }, // Updated label and icon for stock
+  {
+    path: "/volunteers/purchase-history",
+    label: "Purchase History",
+    icon: History,
+  }, // Updated label and icon for purchase history
 ];
 
 function App() {
@@ -61,13 +65,15 @@ function App() {
             </Route>
 
             {/* Shared routes for both Admin and Volunteer */}
-            <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'VOLUNTEER']} />}>
-              <Route path="/inventory" element={<InventoryPage/>} />
+            <Route
+              element={<ProtectedRoute allowedRoles={["ADMIN", "VOLUNTEER"]} />}
+            >
+              <Route path="/inventory" element={<InventoryPage />} />
               <Route path="/account" element={<ProfilePage />} />
             </Route>
 
             {/* Admin routes */}
-            <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+            <Route element={<ProtectedRoute allowedRoles={["ADMIN"]} />}>
               <Route
                 path="/admin"
                 element={<DashboardLayout navItems={adminItems} />}
@@ -95,13 +101,17 @@ function App() {
             </Route>
 
             {/* Volunteer routes */}
-            <Route element={<ProtectedRoute allowedRoles={['VOLUNTEER']} />}>
+            <Route element={<ProtectedRoute allowedRoles={["VOLUNTEER"]} />}>
               <Route
                 path="/volunteers"
                 element={<DashboardLayout navItems={volunteerItems} />}
               >
                 <Route path="" element={<VolunteerPage />} />
-                <Route path="/volunteers/tasks" element={<TasksPage />} />
+                <Route path="/volunteers/stocks" element={<StocksPage />} />
+                <Route
+                  path="/volunteers/purchase-history"
+                  element={<StocksPage />}
+                />
               </Route>
             </Route>
 

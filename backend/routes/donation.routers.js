@@ -4,6 +4,7 @@ import {
   generateDonationReport,
   getAllDonations,
   getDonationTotalsLastNDays,
+  getTotalDonations,
 } from "../controllers/donation.controller.js";
 
 const router = express.Router();
@@ -12,6 +13,7 @@ const router = express.Router();
 
 router.get("/", getAllDonations);
 router.get("/last-n-days", getDonationTotalsLastNDays);
+router.get("/total-donations", getTotalDonations)
 
 router.post("/create", createDonation);
 router.get("/report", generateDonationReport);

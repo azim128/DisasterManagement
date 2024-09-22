@@ -46,7 +46,7 @@ const Header = () => {
               <div className="ml-10 flex items-baseline space-x-4">
                 <NavItem to="/">Home</NavItem>
                 <NavItem to="/about">About</NavItem>
-                <NavItem to="/contact">Contact</NavItem>
+                <NavItem to="/donation">Donation</NavItem>
                 {isAuthenticated && user?.role === "ADMIN" && (
                   <NavItem to="/admin">Dashboard</NavItem>
                 )}

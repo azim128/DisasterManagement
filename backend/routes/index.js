@@ -5,6 +5,7 @@ import donationRouters from "./donation.routers.js";
 import userRouters from "./user.routers.js";
 import inventroyRouters from "./inventory.routers.js";
 import volunteerRouters from "./volunteer.routers.js";
+import purchaseRouters from "./purchase.routers.js";
 
 export {
   adminRouters,
@@ -14,4 +15,5 @@ export {
   userRouters,
   inventroyRouters,
   volunteerRouters,
+  purchaseRouters,
 };
