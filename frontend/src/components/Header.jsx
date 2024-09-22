@@ -48,10 +48,22 @@ const Header = () => {
                 <NavItem to="/about">About</NavItem>
                 <NavItem to="/contact">Contact</NavItem>
                 {isAuthenticated && user?.role === "ADMIN" && (
-                  <NavItem to="/admin">Admin</NavItem>
+                  <NavItem to="/admin">Dashboard</NavItem>
                 )}
                 {isAuthenticated && user?.role === "VOLUNTEER" && (
-                  <NavItem to="/volunteer">Volunteer</NavItem>
+                  <NavItem to="/volunteers">Dashboard</NavItem>
+                )}
+
+                {isAuthenticated && (
+                  <>
+                  <NavItem to="/inventory">Inventory</NavItem>
+                  <NavItem to="/account">Profile</NavItem></>
+                )}
+                {!isAuthenticated && (
+                  <>
+                  <NavItem to="volunteer">Volunteer</NavItem>
+                  <NavItem to="crisis">Crisis</NavItem>
+                  </>
                 )}
               </div>
             </div>

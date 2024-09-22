@@ -81,11 +81,12 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: "LOGOUT" });
   };
 
-  // console.log("from auth context", state);
+  console.log("from auth context", state);
 
   if (!initialLoadComplete) {
     return <FullScreenLoading />; 
   }
+
 
   return (
     <AuthContext.Provider value={{ ...state, dispatch,login, logout }}>

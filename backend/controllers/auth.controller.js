@@ -85,13 +85,13 @@ const loginUser = async (req, res, next) => {
     }
 
     // check user status PENDING or DISABLED
-    if (fetchUser.status === "PENDING" || fetchUser.status === "DISABLED") {
-      return sendErrorResponse(
-        res,
-        403,
-        "Your account is not active. Please contact the admin"
-      );
-    }
+    // if (fetchUser.status === "PENDING" || fetchUser.status === "DISABLED") {
+    //   return sendErrorResponse(
+    //     res,
+    //     403,
+    //     "Your account is not active. Please contact the admin"
+    //   );
+    // }
 
     // creat token
 

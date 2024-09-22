@@ -11,12 +11,15 @@ const Input = React.forwardRef(({ id, type, placeholder, value, onChange, requir
       value={value}
       onChange={onChange}
       required={required}
+
+    
       className={`
         block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm 
         placeholder-gray-400 focus:outline-none  sm:text-sm transition-shadow duration-200 ease-in-out
         ${className}
       `}
       {...props}
+      
     />
   );
 });

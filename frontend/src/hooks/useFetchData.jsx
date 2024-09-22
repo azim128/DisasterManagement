@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from "react";
 import axios from "axios";
 import { apiUrl } from "../config/variables";
 
-const useFetchData = (endpoint, params) => {
+const useFetchData = (endpoint, params,headers={}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,7 +14,7 @@ const useFetchData = (endpoint, params) => {
     try {
       console.log("Fetching data from:", `${apiUrl}${endpoint}`);
       console.log("With params:", params);
-      const response = await axios.get(`${apiUrl}${endpoint}`, { params });
+      const response = await axios.get(`${apiUrl}${endpoint}`, { params,headers });
       console.log("Response:", response);
       if (response.data.success) {
         setData(response.data.data);

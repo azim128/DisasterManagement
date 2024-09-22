@@ -1,4 +1,4 @@
-import { Calendar, FileText, Settings, Users } from "lucide-react";
+import { Calendar, FileText, Users } from "lucide-react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import { AuthProvider } from "./context/AuthContext";
 import DashboardLayout from "./Layout/ DashboardLayout";
@@ -13,6 +13,7 @@ import AboutPage from "./pages/Public/AboutPage";
 import ContactPage from "./pages/Public/ContactPage";
 
 import AdminDashboardPage from "./pages/Admin/AdminDashboardPage";
+import AssignTaskPage from "./pages/Admin/AssignTaskPage";
 import CrisesManagementPage from "./pages/Admin/CrisesManagementPage";
 import FeedBacksPage from "./pages/Admin/FeedBacksPage";
 import ReportsManagementPage from "./pages/Admin/ReportsManagementPage";
@@ -24,9 +25,10 @@ import NotFoundPage from "./pages/Public/NotFoundPage";
 import TasksPage from "./pages/Volunteer/TasksPage";
 import VolunteerPage from "./pages/Volunteer/VolunteerPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
-import AssignTaskPage from "./pages/Admin/AssignTaskPage";
+import CrisisPage from "./pages/Public/CrisisPage";
+import ProfilePage from "./pages/Auth/ProfilePage";
 const adminItems = [
-  { path: "/admin/settings", label: "Settings", icon: Settings },
+  // { path: "/admin/settings", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
   { path: "/admin/reports", label: "Reports", icon: FileText },
   { path: "/admin/crises", label: "Crises", icon: Calendar },
@@ -50,13 +52,21 @@ function App() {
               <Route path="/about" element={<AboutPage />} />
               <Route path="/contact" element={<ContactPage />} />
               <Route path="/login" element={<LoginPage />} />
-              <Route path="/make-donation" element={<DonationPage />} />
+              <Route path="/donation" element={<DonationPage />} />
+              <Route path="/crisis" element={<CrisisPage />} />
+              <Route path="/volunteer" element={<VolunteerPage />} />
               <Route path="/register" element={<RegisterPage />} />
               <Route path="/not-authorized" element={<NotAuthorized />} />
             </Route>
 
+            {/* Shared routes for both Admin and Volunteer */}
+            <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'VOLUNTEER']} />}>
+              <Route path="/inventory" element={<div>inventory page</div>} />
+              <Route path="/account" element={<ProfilePage />} />
+            </Route>
+
             {/* Admin routes */}
-            <Route element={<ProtectedRoute requiredRole="ADMIN" />}>
+            <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
               <Route
                 path="/admin"
                 element={<DashboardLayout navItems={adminItems} />}
@@ -78,20 +88,19 @@ function App() {
                   path="/admin/assign-task/:id"
                   element={<AssignTaskPage />}
                 />
-
                 <Route path="/admin/feedbacks" element={<FeedBacksPage />} />
                 <Route path="/admin/settings" element={<SettingPage />} />
               </Route>
             </Route>
 
             {/* Volunteer routes */}
-            <Route element={<ProtectedRoute requiredRole="VOLUNTEER" />}>
+            <Route element={<ProtectedRoute allowedRoles={['VOLUNTEER']} />}>
               <Route
-                path="/volunteer"
+                path="/volunteers"
                 element={<DashboardLayout navItems={volunteerItems} />}
               >
                 <Route path="" element={<VolunteerPage />} />
-                <Route path="/volunteer/tasks" element={<TasksPage />} />
+                <Route path="/volunteers/tasks" element={<TasksPage />} />
               </Route>
             </Route>
 

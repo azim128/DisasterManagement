@@ -1,5 +1,8 @@
 import express from "express";
-import { getUserProfile } from "../controllers/user.controller.js";
+import {
+  getUserProfile,
+  updateUserProfile,
+} from "../controllers/user.controller.js";
 import {
   authenticateToken,
   checkIsActive,
@@ -10,8 +13,14 @@ const router = express.Router();
 router.get(
   "/get-profile/:id",
   authenticateToken,
-  checkIsActive,
   getUserProfile
+);
+
+router.put(
+  "/update-profile/:id",
+  authenticateToken,
+  checkIsActive,
+  updateUserProfile
 );
 
 export default router;
