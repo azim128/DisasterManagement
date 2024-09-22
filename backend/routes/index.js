@@ -3,6 +3,7 @@ import authRouters from "./auth.routers.js";
 import crisisRouters from "./crisis.routers.js";
 import donationRouters from "./donation.routers.js";
 import userRouters from "./user.routers.js";
+import inventroyRouters from "./inventory.routers.js";
 
 export {
   adminRouters,
@@ -10,4 +11,5 @@ export {
   crisisRouters,
   donationRouters,
   userRouters,
+  inventroyRouters,
 };

@@ -1,4 +1,5 @@
 import prisma from "../../lib/prisma.js";
+import { categories } from "../../utils/enums.js";
 import {
   sendErrorResponse,
   sendSuccessResponse,
@@ -8,9 +9,23 @@ const createInventoryItem = async (req, res, next) => {
   try {
     const { name, description, quantity, price, category } = req.body;
 
-    // validate the input
+    // Validate the input
     if (!name || !description || !quantity || !price || !category) {
       return sendErrorResponse(res, 400, "All fields are required");
+    }
+
+    // Check if the category is valid
+    if (!categories.includes(category)) {
+      return sendErrorResponse(res, 400, "Invalid category");
+    }
+
+    // Check if the item name is unique
+    const existingItem = await prisma.inventoryItem.findUnique({
+      where: { name },
+    });
+
+    if (existingItem) {
+      return sendErrorResponse(res, 400, "Item name must be unique");
     }
 
     // Create the inventory item
@@ -38,6 +53,24 @@ const updateInventoryItem = async (req, res, next) => {
   try {
     const { id } = req.params;
     const { name, description, quantity, price, category } = req.body;
+
+    // Check if the category is valid
+    if (category && !categories.includes(category)) {
+      return sendErrorResponse(res, 400, "Invalid category");
+    }
+
+    // Check if the item name is unique
+    if (name) {
+      const existingItem = await prisma.inventoryItem.findUnique({
+        where: {
+          name,
+        },
+      });
+
+      if (existingItem && existingItem.id !== parseInt(id)) {
+        return sendErrorResponse(res, 400, "Item name must be unique");
+      }
+    }
 
     // Update the inventory item
     const updatedInventoryItem = await prisma.inventoryItem.update({
@@ -83,19 +116,6 @@ const deleteInventoryItem = async (req, res, next) => {
   }
 };
 
-const getInventoryItems = async (req, res, next) => {
-  try {
-    const inventoryItems = await prisma.inventoryItem.findMany();
-
-    sendSuccessResponse(res, 200, {
-      data: inventoryItems,
-    });
-  } catch (error) {
-    console.error("Error fetching inventory items:", error);
-    next(error);
-  }
-};
-
 const getInventoryItemById = async (req, res, next) => {
   try {
     const { id } = req.params;
@@ -119,12 +139,11 @@ const getInventoryItemById = async (req, res, next) => {
   }
 };
 
-// 
+//
 
 export {
   createInventoryItem,
   deleteInventoryItem,
   getInventoryItemById,
-  getInventoryItems,
   updateInventoryItem,
 };

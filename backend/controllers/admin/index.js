@@ -12,7 +12,6 @@ import {
   createInventoryItem,
   deleteInventoryItem,
   getInventoryItemById,
-  getInventoryItems,
   updateInventoryItem,
 } from "./inventoryMangement.controllers.js";
 
@@ -22,7 +21,6 @@ export {
   deleteInventoryItem,
   getAllUsers,
   getInventoryItemById,
-  getInventoryItems,
   updateCrisisStatus,
   updateInventoryItem,
   updateUserStatus,
