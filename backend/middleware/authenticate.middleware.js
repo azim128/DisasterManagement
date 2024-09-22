@@ -76,6 +76,8 @@ const authenticateToken = (req, res, next) => {
     const decoded = verifyToken(extractedToken);
     req.user = decoded;
 
+    // console.log("decoded", decoded);
+
     next();
   } catch (error) {
     console.error("Error in authentication middleware:", error);
@@ -83,4 +85,28 @@ const authenticateToken = (req, res, next) => {
   }
 };
 
-export { authenticateToken, checkIsActive, checkIsAdmin };
+
+const volunteerIsActive = async (req, res, next) => {
+
+  const userId = req.user.id;
+
+  const user = await prisma.user.findUnique({
+    where: {
+      user_id: userId,
+    },
+  });
+
+  if (user.status !== "ACTIVE") {
+    return sendErrorResponse(
+      res,
+      403,
+      "Your account is not active. Please contact the admin"
+    );
+  }
+
+  next();
+}
+
+
+
+export { authenticateToken, checkIsActive, checkIsAdmin,volunteerIsActive };

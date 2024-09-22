@@ -5,7 +5,6 @@ import {
   deleteInventoryItem,
   getAllUsers,
   getInventoryItemById,
-  getInventoryItems,
   updateCrisisStatus,
   updateInventoryItem,
   updateUserStatus,
@@ -43,7 +42,6 @@ router.delete(
   checkIsAdmin,
   deleteInventoryItem
 );
-router.get("/inventory", authenticateToken, checkIsAdmin, getInventoryItems);
 router.get(
   "/inventory/:id",
   authenticateToken,

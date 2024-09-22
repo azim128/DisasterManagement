@@ -1,7 +1,7 @@
 import express from "express";
 import { PORT } from "./config/variable.config.js";
 import prisma from "./lib/prisma.js";
-import { adminRouters, authRouters, crisisRouters, donationRouters, inventroyRouters, userRouters } from "./routes/index.js";
+import { adminRouters, authRouters, crisisRouters, donationRouters, inventroyRouters, userRouters, volunteerRouters } from "./routes/index.js";
 import cors from "cors";
 import {
   sendErrorResponse,
@@ -24,6 +24,7 @@ app.use("/api/v1/admin", adminRouters);
 app.use("/api/v1/donation", donationRouters);
 app.use("/api/v1/crisis", crisisRouters);
 app.use("/api/v1/inventory", inventroyRouters);
+app.use("/api/v1/volunteer", volunteerRouters);
 
 app.get("/", (req, res) => {
   sendSuccessResponse(res, 200, { message: "Hello, world!" });

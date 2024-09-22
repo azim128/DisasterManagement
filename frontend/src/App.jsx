@@ -27,6 +27,7 @@ import VolunteerPage from "./pages/Volunteer/VolunteerPage";
 import ProtectedRoute from "./routes/ProtectedRoute";
 import CrisisPage from "./pages/Public/CrisisPage";
 import ProfilePage from "./pages/Auth/ProfilePage";
+import InventoryPage from "./pages/common/InventoryPage";
 const adminItems = [
   // { path: "/admin/settings", label: "Settings", icon: Settings },
   { path: "/admin/volunteers", label: "Volunteers", icon: Users },
@@ -61,7 +62,7 @@ function App() {
 
             {/* Shared routes for both Admin and Volunteer */}
             <Route element={<ProtectedRoute allowedRoles={['ADMIN', 'VOLUNTEER']} />}>
-              <Route path="/inventory" element={<div>inventory page</div>} />
+              <Route path="/inventory" element={<InventoryPage/>} />
               <Route path="/account" element={<ProfilePage />} />
             </Route>
 
