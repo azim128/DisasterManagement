@@ -29,6 +29,7 @@ import PropTypes from "prop-types";
 import React, { useCallback, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import useFetchData from "../../hooks/useFetchData";
+import { apiUrl } from "../../config/variables";
 
 const CrisisDetails = React.memo(({ crisis }) => (
   <VStack align="stretch" bg="gray.50" p={4} borderRadius="md" height="100%">
@@ -158,7 +159,7 @@ const AssignTaskToVolunteer = ({ crisisId, volunteers, volunteerLoading }) => {
 
     try {
       await axios.post(
-        `http://localhost:3001/api/v1/admin/crisis/${crisisId}/assign`,
+        `${apiUrl}/api/v1/admin/crisis/${crisisId}/assign`,
         {
           volunteerId: selectedVolunteerId,
           taskDetails,

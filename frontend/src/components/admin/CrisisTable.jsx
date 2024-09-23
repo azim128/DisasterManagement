@@ -14,13 +14,13 @@ import {
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { apiUrl } from "../../config/variables";
 import { useAuth } from "../../context/AuthContext";
 import useFetchData from "../../hooks/useFetchData";
-import SkeletonLoader from "../ui/SkeletonLoader";
 import { toNormalCase } from "../../utils/toNormalcase";
-import { apiUrl } from "../../config/variables";
+import SkeletonLoader from "../ui/SkeletonLoader";
 
-const statusEnum = ["PENDING", "APPROVED", "REJECTED", "ASSIGNED", "RESOLVED"];
+const statusEnum = ["PENDING", "APPROVED", "REJECTED"];
 
 const CrisisTable = () => {
   const { token } = useAuth(); // Get the token from useAuth
@@ -139,9 +139,15 @@ const CrisisTable = () => {
                     entry.status === "ASSIGNED" ? (
                       <Link
                         to={`/admin/assign-task/${entry.id}`}
-                        className="py-1 px-2 bg-blue-500 text-white rounded"
+                        className={`py-1 px-2 rounded text-white ${
+                          entry.status === "APPROVED"
+                            ? "bg-blue-500"
+                            : "bg-gray-500"
+                        }`}
                       >
-                        {entry.status === "APPROVED" ? "Assign Task" : "Assigned"}
+                        {entry.status === "APPROVED"
+                          ? "Assign Task Someone"
+                          : "Assigned"}
                       </Link>
                     ) : (
                       entry.status
@@ -154,11 +160,15 @@ const CrisisTable = () => {
                       onChange={(e) => handleStatusChange(e, entry.id)}
                       placeholder="Update Status"
                     >
-                      {statusEnum.map((status) => (
-                        <option key={status} value={status}>
-                          {toNormalCase(status)}
-                        </option>
-                      ))}
+                      {entry.status === "ASSIGNED" ? (
+                        <option value="RESOLVED">Resolved</option>
+                      ) : (
+                        statusEnum.map((status) => (
+                          <option key={status} value={status}>
+                            {toNormalCase(status)}
+                          </option>
+                        ))
+                      )}
                     </Select>
                   </Td>
                 </Tr>
