@@ -9,6 +9,7 @@ import {
 } from "react";
 import FullScreenLoading from "../components/FullScreenLoading";
 import { authReducer } from "../reducer/authReducer";
+import { apiUrl } from "../config/variables";
 
 const AuthContext = createContext();
 
@@ -48,7 +49,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: "SET_LOADING", payload: true });
     try {
       const response = await axios.post(
-        "http://localhost:3001/api/v1/auth/login",
+        `${apiUrl}/api/v1/auth/login`,
         {
           email,
           password,

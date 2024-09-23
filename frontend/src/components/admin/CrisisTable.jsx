@@ -18,6 +18,7 @@ import { useAuth } from "../../context/AuthContext";
 import useFetchData from "../../hooks/useFetchData";
 import SkeletonLoader from "../ui/SkeletonLoader";
 import { toNormalCase } from "../../utils/toNormalcase";
+import { apiUrl } from "../../config/variables";
 
 const statusEnum = ["PENDING", "APPROVED", "REJECTED", "ASSIGNED", "RESOLVED"];
 
@@ -50,7 +51,7 @@ const CrisisTable = () => {
     const newStatus = event.target.value;
 
     // PUT request to update crisis status
-    fetch(`http://localhost:3001/api/v1/admin/crisis/${crisisId}/`, {
+    fetch(`${apiUrl}/api/v1/admin/crisis/${crisisId}/`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",

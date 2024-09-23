@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 import Button from "./ui/Button";
 import Input from "./ui/Input";
 import Label from "./ui/Label";
+import { apiUrl } from "../config/variables";
 
 const severityEnum = ["LOW", "MEDIUM", "HIGH", "CRITICAL"];
 
@@ -25,7 +26,7 @@ const CreateCrisis = () => {
 
     try {
       await axios.post(
-        "http://localhost:3001/api/v1/crisis/create",
+        `${apiUrl}/api/v1/crisis/create`,
         { title, description, severity, requiredHelp, location },
         { headers: { Authorization: `Bearer ${token}` } }
       );
